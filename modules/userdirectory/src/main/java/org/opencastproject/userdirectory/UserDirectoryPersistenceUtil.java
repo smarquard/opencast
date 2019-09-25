@@ -75,6 +75,7 @@ public final class UserDirectoryPersistenceUtil {
           updatedRoles.add(jpaRole);
         } else {
           findRole.setDescription(jpaRole.getDescription());
+          findRole.setTarget(jpaRole.getTarget());
           updatedRoles.add(em.merge(findRole));
         }
       }

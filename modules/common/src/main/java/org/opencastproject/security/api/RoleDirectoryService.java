@@ -51,4 +51,14 @@ public interface RoleDirectoryService {
    */
   Iterator<Role> findRoles(String query, Role.Target target, int offset, int limit);
 
+  /**
+   * Find the first matching role
+   *
+   * @param roleName
+   *          the role name
+   * @return the role if found, otherwise null
+   * @throws IllegalArgumentException
+   *           if the roleName is <code>null</code>
+   */
+   Role findRole(String roleName);
 }

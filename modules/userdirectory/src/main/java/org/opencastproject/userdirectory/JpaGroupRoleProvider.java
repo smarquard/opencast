@@ -38,6 +38,7 @@ import org.opencastproject.security.api.JaxbRole;
 import org.opencastproject.security.api.Organization;
 import org.opencastproject.security.api.OrganizationDirectoryService;
 import org.opencastproject.security.api.Role;
+import org.opencastproject.security.api.RoleDirectoryService;
 import org.opencastproject.security.api.RoleProvider;
 import org.opencastproject.security.api.SecurityService;
 import org.opencastproject.security.api.UnauthorizedException;
@@ -97,6 +98,9 @@ public class JpaGroupRoleProvider extends AbstractIndexProducer implements RoleP
   /** The user directory service */
   protected UserDirectoryService userDirectoryService = null;
 
+  /** The user directory service */
+  protected RoleDirectoryService roleDirectoryService = null;
+
   /** The component context */
   private ComponentContext cc;
 
@@ -113,6 +117,10 @@ public class JpaGroupRoleProvider extends AbstractIndexProducer implements RoleP
    */
   public void setUserDirectoryService(UserDirectoryService userDirectoryService) {
     this.userDirectoryService = userDirectoryService;
+  }
+
+  public void setRoleDirectoryService(RoleDirectoryService roleDirectoryService) {
+    this.roleDirectoryService = roleDirectoryService;
   }
 
   /**

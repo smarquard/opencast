@@ -189,6 +189,11 @@ public class UserAndRoleDirectoryServiceImpl implements UserDirectoryService, Us
   protected synchronized void addRoleProvider(RoleProvider roleProvider) {
     logger.debug("Adding {} to the list of role providers", roleProvider);
     roleProviders.add(roleProvider);
+    persistRoles(roleProvider);
+  }
+
+  protected persistRoles(RoleProvider roleProvider) {
+     UserDirectoryPersistenceUtil.saveRoles(user.getRoles(), emf);
   }
 
   /**
@@ -491,6 +496,41 @@ public class UserAndRoleDirectoryServiceImpl implements UserDirectoryService, Us
       return stream.limit(limit).iterator();
     }
     return stream.iterator();
+  }
+
+  @Override
+  public Role findRole(String roleName) {
+
+    if (roleName == null)
+      throw new IllegalArgumentException("Query must be set");
+
+    Organization org = securityService.getOrganization();
+
+    if (org == null)
+      throw new IllegalStateException("No organization is set");
+
+    for (RoleProvider roleProvider : roleProviders) {
+
+      final String providerOrgId = roleProvider.getOrganization();
+
+      if (ALL_ORGANIZATIONS.equals(providerOrgId) || org.getId().equals(providerOrgId)) {
+
+        Iterator<Role> roles = roleProvider.findRoles(roleName, Role.Target.ALL, 0, 0);
+
+        while (roles.hasNext()) {
+           Role candidateRole = roles.next();
+
+           if (roleName.equals(candidateRole.getName())) {
+             return candidateRole;
+           } //if
+
+         } //while
+
+      } //if
+
+    } //for
+
+    return null;
   }
 
   @Override
